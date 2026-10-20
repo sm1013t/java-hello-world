@@ -10,7 +10,11 @@ pipeline {
 
         stage('Maven Build') {
             steps {
-                sh 'mvn clean install'
+                sh '''
+                 export JAVA_HOME=/opt/app/softwares/java/jdk-21.0.12
+                 export PATH=/opt/app/softwares/maven-3.9.16/bin:$JAVA_HOME/bin:$PATH
+                 mvn clean install
+              '''
             }
         }
     }
