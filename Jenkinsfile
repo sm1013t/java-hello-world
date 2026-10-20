@@ -8,9 +8,9 @@ pipeline {
             }
         }
 
-        stage('Hello World') {
+        stage('Maven Build') {
             steps {
-                echo 'Hello World'
+                sh 'mvn clean install'
             }
         }
     }
