@@ -26,15 +26,6 @@ pipeline {
                  mvn test
               '''
             }
-            post {
-                always {
-                    junit '**/target/surefire-reports/TEST-*.xml'
-                    archiveArtifacts(
-                        artifacts: '**/target/site/jacoco/**',
-                        allowEmptyArchive: true
-                    )
-                }
-            }
         }
     }
 }
