@@ -36,5 +36,20 @@ pipeline {
                 }
             }
         }
+
+        stage('SonarCloud Analysis') {
+            steps {
+                script {
+                    // Resolve the SonarScanner installation configured in Jenkins.
+                    def scannerHome = tool 'SonarScanner8.1.0'
+
+                    // Provide the SonarCloud server URL and authentication settings.
+                    withSonarQubeEnv('SonarCloudServer') {
+                        // Run the scanner; it reads project settings from sonar-project.properties.
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
     }
 }
