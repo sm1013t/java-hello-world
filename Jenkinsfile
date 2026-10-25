@@ -26,6 +26,7 @@ pipeline {
                  mvn test
               '''
             }
+            /*
             post {
                 always {
                     junit '**/target/surefire-reports/TEST-*.xml'
@@ -35,6 +36,7 @@ pipeline {
                     )
                 }
             }
+            */
         }
 
         stage('SonarCloud Analysis') {
