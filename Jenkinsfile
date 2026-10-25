@@ -39,15 +39,16 @@ pipeline {
 
         stage('SonarCloud Analysis') {
             steps {
-                script {
-                    // Resolve the SonarScanner installation configured in Jenkins.
-                    def scannerHome = tool 'SonarScanner8.1.0'
-
-                    // Provide the SonarCloud server URL and authentication settings.
-                    withSonarQubeEnv('SonarCloudServer') {
-                        // Run the scanner; it reads project settings from sonar-project.properties.
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
+                // Provide the configured SonarCloud server URL and authentication settings.
+                withSonarQubeEnv('SonarCloudServer') {
+                    // Run the Maven scanner, which discovers modules and paths from the POMs.
+                    sh '''
+                     export JAVA_HOME=/opt/app/softwares/java/jdk-21.0.12
+                     export PATH=/opt/app/softwares/maven-3.9.16/bin:$JAVA_HOME/bin:$PATH
+                     mvn sonar:sonar \
+                       -Dsonar.projectKey=attorg-key_java-maven-project \
+                       -Dsonar.organization=attorg-key
+                  '''
                 }
             }
         }
