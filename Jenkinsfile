@@ -45,7 +45,18 @@ pipeline {
 
                     // Provide SonarCloud connection settings and run the scanner.
                     withSonarQubeEnv('SonarCloudServer') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        withEnv(["SONAR_SCANNER_HOME=${scannerHome}"]) {
+                            sh '''
+                             echo "BRANCH_NAME=$BRANCH_NAME"
+                             echo "GIT_BRANCH=$GIT_BRANCH"
+                             branch_name="${BRANCH_NAME:-${GIT_BRANCH#origin/}}"
+                             if [ -z "$branch_name" ]; then
+                                 echo "Unable to determine the current Git branch from BRANCH_NAME or GIT_BRANCH." >&2
+                                 exit 1
+                             fi
+                             "$SONAR_SCANNER_HOME/bin/sonar-scanner" "-Dsonar.branch.name=$branch_name"
+                          '''
+                        }
                     }
                 }
             }
